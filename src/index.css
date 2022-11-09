@@ -1,0 +1,10 @@
+.navButton {
+  border: solid 2px black;
+  padding: 10px;
+  margin: 5px;
+}
+
+body {
+  padding: 15px;
+  text-align: center;
+}
