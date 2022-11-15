@@ -3,9 +3,16 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//import {Routes, Route, useNavigate} from 'react-router-dom';
 import "../App.css";
 
 function GridComplexExample() {
+ /* const navigate = useNavigate();
+
+  const navigateToContacts = () => {
+    navigate('/restaurants');
+  };
+  */
   return (
     <Form className="grid">
       <Row className="mb-3">
@@ -54,7 +61,7 @@ function GridComplexExample() {
         <Form.Check type="checkbox" label="Check me out" />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="primary" type="submit" /*onClick = {navigateToRestaurants}*/>
         Submit
       </Button>
     </Form>
