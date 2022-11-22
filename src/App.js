@@ -1,33 +1,73 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./App.css";
-import { Route, Switch } from "react-router-dom";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Error from "./pages/Error";
+import Header from './components/Header';
+import { Home } from './components/Home';
+import Basket from './components/Basket';
+import data from "./data";
+import {useState, useEffect} from "react";
 
-import Register from "./pages/Register";
-import SignIn from "./pages/SignIn";
-import Restaurants from "./pages/Restaurants";
-import Food from "./pages/Food";
-import Cart from "./pages/Cart";
+function App() {
+  const { foods } = data;
+  const [cartItems, setCartItems] = useState([]);
 
-import Navbar from "./components/Navbar";
 
-function App(props) {
+
+  /*
+  const {foods} = useEffect( () => {
+     const apiUrl = "http://localhost:5000/api/foods/";
+     fetch(apiUrl)
+       .then((res) => res.json())
+      .then((foods) ); 
+   }, []);
+   */
+  
+  const handleAdd = (food) => {
+    const found = cartItems.find((x) => x.id === food.id);
+    if (found) {
+      setCartItems(cartItems.map((x) =>
+       x.id === food.id ? {...found, qty:found.qty+1} : x
+      ));
+    } else {
+      setCartItems([...cartItems, {...food, qty:1}])
+    }
+  };
+  const handleRemove = (food) => {
+    const found = cartItems.find((x) => x.id === food.id);
+    if (found.qty === 1) {
+      setCartItems(cartItems.filter((x) => x.id !== food.id));
+    } else {
+      setCartItems(
+        cartItems.map((x) => 
+        x.id === food.id ? {...found, qty: found.qty-1} : x
+      ))
+    }
+  };
+
+  useEffect(() => {
+    const data = localStorage.getItem("listOfSelectedFoods");
+      setCartItems(JSON.parse(data));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("listOfSelectedFoods", JSON.stringify(cartItems));
+   }, [cartItems]);
+    
   return (
-    <div className="todoapp stack-large">
-      <Navbar />
-      <Switch>
-        <Route path="/" component={Home} exact />
-        <Route path="/about" component={About} />
-        <Route path="/register" component={Register} />
-        <Route path="/signin" component={SignIn} />
-        <Route path="/restaurants" component={Restaurants} />
-        <Route path="/food" component={Food} />
-        <Route path="/cart" component={Cart} />
-        <Route component={Error} />
-      </Switch>
+    <div className="App">
+      <Header countCartItems = {cartItems.length}></Header>
+      <div className="row">
+        <Home 
+          foods={foods}
+          handleAdd={handleAdd}
+        >
+        </Home>
+        <Basket
+          cartItems = {cartItems}
+          handleAdd={handleAdd}
+          handleRemove = {handleRemove}
+        ></Basket>
+      </div>
+      
     </div>
   );
 }
+
 export default App;
