@@ -1,24 +1,12 @@
 import Header from './components/Header';
 import { Home } from './components/Home';
 import Basket from './components/Basket';
-import data from "./data";
-import {useState, useEffect} from "react";
+import {useState, useEffect} from "react";  
 
 function App() {
-  const { foods } = data;
   const [cartItems, setCartItems] = useState([]);
-
-
-
-  /*
-  const {foods} = useEffect( () => {
-     const apiUrl = "http://localhost:5000/api/foods/";
-     fetch(apiUrl)
-       .then((res) => res.json())
-      .then((foods) ); 
-   }, []);
-   */
-  
+  const [foods, setFoods] = useState([]);
+   
   const handleAdd = (food) => {
     const found = cartItems.find((x) => x.id === food.id);
     if (found) {
@@ -49,6 +37,13 @@ function App() {
   useEffect(() => {
     localStorage.setItem("listOfSelectedFoods", JSON.stringify(cartItems));
    }, [cartItems]);
+
+    const API_endpoint = 'http://localhost:5000/api/foods/';
+    useEffect( () => {
+     fetch(API_endpoint)
+      .then((res) => res.json())
+      .then((food) => (setFoods(Object.values(food)))); 
+   }, []);
     
   return (
     <div className="App">
@@ -71,3 +66,4 @@ function App() {
 }
 
 export default App;
+
